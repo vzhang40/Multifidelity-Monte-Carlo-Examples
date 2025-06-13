@@ -18,7 +18,7 @@ w = [1; 0.001]; % [high-fidelity, low-fidelity]
 p = [10; 40; 100; 1000];
 
 % number of replicates (how many estimators)
-R = 50; 
+R = 1; 
 
 %% Getting necessary statistics for analysis
 
@@ -63,13 +63,14 @@ for n = 1:length(p)
 end
 %% Plotting
 figure(1); clf(1)
+
 xscale('log') 
 hold on
 plot(p, mu_true.*ones(length(p),1), "k-")
 plot(p, mfmc_means, 'r--')
 plot(p, mc_means, 'b--')
-patch([p; flip(p)], [mfmc_means-mfmc_sigma; flip(mfmc_means+mfmc_sigma)], 'r', 'FaceAlpha', 0.1, 'EdgeColor','none')
-patch([p; flip(p)], [mc_means-mc_sigma; flip(mc_means+mc_sigma)], 'b', 'FaceAlpha', 0.1, 'EdgeColor','none')
+patch([p; flip(p)], [mfmc_means-mfmc_sigma_anal; flip(mfmc_means+mfmc_sigma_anal)], 'r', 'FaceAlpha', 0.1, 'EdgeColor','none')
+patch([p; flip(p)], [mc_means-mc_sigma_anal; flip(mc_means+mc_sigma_anal)], 'b', 'FaceAlpha', 0.1, 'EdgeColor','none')
 legend("True $\mu$", "$\mu_{MFMC}$", "$\mu_{MC}$", "$\pm \sigma_{MFMC}$", "$\pm \sigma_{MC}$", "Interpreter", "latex")
 xlabel("Computational Budget", "Interpreter", "latex")
 ylabel("Estimate Mean Model Output", "Interpreter", "latex")
