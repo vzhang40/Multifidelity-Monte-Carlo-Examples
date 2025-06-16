@@ -6,106 +6,102 @@ clear; close all; clc
 
 %% Problem Set-up
 % Models
-f1 = @(x) exp(x); % high-fidelity
-f2 = @(x) 0.9*exp(0.5.*x); % low fidelity
-f = @(x) [f1(x), f2(x)]; % [high-fidelity, surrogates]
+models(1).f = @(x) exp(x); % high-fidelity
+models(2).f = @(x) 0.9*exp(0.5.*x); % low fidelity
+models(3).f = @(x) 0.5*exp(0.4.*x); % lower fidelity/???
+models(4).f = @(x) 0.1*exp(0.1.*x);
 
-% Plotting the models
+% Plotting models
 figure(1); clf(1);
 x = linspace(0, 5, 100);
-plot(x, f1(x), 'Color', [0 0.4470 0.7410], "LineStyle","-")
+legendtext = cell(size({models.f}));
+legendtext{1} = "Truth $f^{(1)}$";
+plot(x, models(1).f(x))
 hold on
-plot(x, f2(x), 'Color', [0.8500 0.3250 0.0980], "LineStyle","-")
-legend("High Fidelity $f^{(1)}$", "Low Fidelity $f^{(2)}$", "Interpreter", "latex")
-xlabel("x", "Interpreter", "latex")
-ylabel("Model Values", "Interpreter", "latex")
-title("Models")
+for i = 2:length({models.f})
+    plot(x, models(i).f(x))
+    legendtext{i} = "$f^{(" + i + ")}$";
+end
+legend(legendtext, "Interpreter", "latex")
+xlabel("$x$", "Interpreter", "latex")
+ylabel("$f^{(i)}(x)$", "Interpreter", "latex")
+title("Truth and Surrogate Models")
 
 % Model Costs
-w = [1; 0.001]; % [high-fidelity, low-fidelity]
+w = [1; 0.001; 0.0001]; % [high-fidelity, low-fidelity]
 
 % Computational Budgets
 p = [10; 40; 100; 1000];
 
 % number of replicates (how many estimators)
-R = 1; 
+R = 50; 
 
 %% Getting necessary statistics for analysis
 
-% Monte Carlo Estimates for Statistics
+% Monte Carlo Estimates for Statistics, does not work if you add more
+% functions 6/16
 % N_MC = 1e6; % number of points sampled for stats
-% [mu_true, sigma, rho] = getStatsMC(f, N_MC);
+% stats = getStatsMC(models, N_MC);
+% mu_true = stats.mus(1);
 
-% Gaussian Quadrature Calculations
+% Gaussian Quadrature Calculations, works if you add more functions
 N_gauss = 100; % number of points sampled for stats
 a = 0; b = 5; % bounds defined by r.v Z
-[mu_true, sigma, rho] = getStatsGauss(f1, f, N_gauss, a, b);
+stats = getStatsGauss(models, N_gauss, a, b);
+mu_true = stats.mus(1);
 
 %% Sampling
-
-% initializing vectors
-mfmc_means = zeros(length(p), 1);
-mfmc_sigma = zeros(length(p), 1);
-mc_means = zeros(length(p), 1);
-mc_sigma = zeros(length(p), 1);
-mfmc_sigma_anal = zeros(length(p), 1);
-mc_sigma_anal = zeros(length(p), 1);
-
-mfmc_MSE_anal = zeros(length(p), 1);
-mfmc_MSE = zeros(length(p), 1);
-mc_MSE_anal = zeros(length(p), 1);
-mc_MSE = zeros(length(p), 1);
+s_MFMC = zeros(R, length(p));
+s_MC = zeros(R, length(p));
+[mfmc, mc] = getParameters(stats, w, p);
 
 for n = 1:length(p)
     % Getting parameters to calculate MFMC and MC estimator
-    [alpha, m_MFMC, m_MC] = getParameters(sigma, rho, w, p(n));
-    
     % Implementing MFMC
-    fs = {f1, f2};
-    s_MFMC = doMFMC(fs, alpha, m_MFMC, R);
+    s_MFMC(:, n) = doMFMC(models, mfmc, R, n);
     
     % Implementing MC
-    s_MC = doMC(f1, m_MC, R);
-    
-    % Experimental estimator statistics
-    mfmc_means(n) = mean(s_MFMC);
-    mfmc_sigma(n) = std(s_MFMC);
-    mc_means(n) = mean(s_MC);
-    mc_sigma(n) = std(s_MC);
-
-
-    % Analytical standard deviations of estimates
-    [mc_sigma_anal(n), mfmc_sigma_anal(n)] = calcAnalSTD(sigma(1), rho, m_MFMC, m_MC);
-
-    % Mean Square Error Analytical
-    mfmc_MSE_anal(n) = sigma(1)^2*(1-rho(2)^2)*p(n)./(m_MFMC(1)^2*w(1));
-    mc_MSE_anal(n) = sigma(1)^2/m_MC;
-
-    % MSE experimental 
-    mfmc_MSE(n) = (1)
+    s_MC(:, n) = doMC(models(1).f, mc.m(n), R);
 end
+
+%% Experimental and Analytical Statistics
+% Experimental stats
+mfmc.means = mean(s_MFMC)';
+mfmc.sigma = std(s_MFMC)';
+mc.means = mean(s_MC)';
+mc.sigma = std(s_MC)';
+mfmc.mse = mean((mu_true - s_MFMC).^2)';
+mc.mse = mean((mu_true - s_MC).^2)';
+
+% Analytical stats
+mfmc.mseAnal = stats.sigma(1)^2*(1-stats.rho(2)^2)*p./(mfmc.m(:,1).^2*w(1));
+mc.mseAnal = stats.sigma(1)^2./mc.m;
+mc.sigmaAnal = stats.sigma(1)./sqrt(mc.m);
+mfmc.sigmaAnal = sqrt(stats.sigma(1)^2./mfmc.m(:, 1) - sum((1./mfmc.m(:, 1:end-1) - 1./mfmc.m(:, 2:end))*stats.rho(2:end).^2.*stats.sigma(1)^2, 2));
+
 %% Plotting Comptuational Cost versus Mean Estimate
 figure(2); clf(2)
-
 xscale('log') 
 hold on
 plot(p, mu_true.*ones(length(p),1), "k-")
-plot(p, mfmc_means, 'r--')
-plot(p, mc_means, 'b--')
-patch([p; flip(p)], [mfmc_means-mfmc_sigma_anal; flip(mfmc_means+mfmc_sigma_anal)], 'r', 'FaceAlpha', 0.1, 'EdgeColor','none')
-patch([p; flip(p)], [mc_means-mc_sigma_anal; flip(mc_means+mc_sigma_anal)], 'b', 'FaceAlpha', 0.1, 'EdgeColor','none')
+plot(p, mfmc.means, 'Color', [0.8500 0.3250 0.0980], "LineStyle","-")
+plot(p, mc.means, 'Color', [0 0.4470 0.7410], "LineStyle","-")
+patch([p; flip(p)], [mfmc.means-mfmc.sigmaAnal; flip(mfmc.means+mfmc.sigmaAnal)], 'r', 'FaceAlpha', 0.1, 'EdgeColor','none')
+patch([p; flip(p)], [mc.means-mc.sigmaAnal; flip(mc.means+mc.sigmaAnal)], 'b', 'FaceAlpha', 0.1, 'EdgeColor','none')
 legend("True $\mu$", "$\mu_{MFMC}$", "$\mu_{MC}$", "$\pm \sigma_{MFMC}$", "$\pm \sigma_{MC}$", "Interpreter", "latex")
 xlabel("Computational Budget", "Interpreter", "latex")
 ylabel("Estimate Mean Model Output", "Interpreter", "latex")
 title("Analytical MFMC Example Results", "Interpreter", "latex")
 
-displayStuff = table(p, mfmc_means, mfmc_sigma, mfmc_sigma_anal, mc_means, mc_sigma, mc_sigma_anal);
-
 %% Plotting Computational Cost versus MSE
 figure(3); clf(3);
-
-% Analytical MSE Corollary 3.5
-loglog(p, mfmc_MSE_anal, "r-")
+loglog(p, mfmc.mseAnal, 'Color', [0.8500 0.3250 0.0980], "LineStyle","-")
 hold on
-loglog(p, mc_MSE_anal, "b-")
+loglog(p, mc.mseAnal, 'Color', [0 0.4470 0.7410], "LineStyle","-")
+loglog(p, mfmc.mse, 'Color', [0.8500 0.3250 0.0980], "Marker","o", "LineStyle","none")
+loglog(p, mc.mse, 'Color', [0 0.4470 0.7410], "Marker","o", "LineStyle","none")
+legend("Analytical MFMC", "Analytical MC", "Observed MFMC", "Observed MC", "Interpreter", "latex")
+xlabel("Computational Cost $p$", "Interpreter", "latex")
+ylabel("Mean Square Error", "Interpreter", "latex")
+title("Mean Square Error in Sampling Methods", "Interpreter", "latex")
 
