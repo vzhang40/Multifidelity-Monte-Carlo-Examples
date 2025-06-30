@@ -1,0 +1,61 @@
+clear; close all; clc
+
+%% Problem Set-up
+load('samples.mat')
+addpath('..\mfmcExamples\functions')
+
+models.f = yA;
+models.testing = yB(:, 1);
+
+% Cost vector [hi-fidelity, low fidelity]
+w = [1.94; 6.20e-3];
+
+% Computational Budgets
+p = [10; 40; 100; 1000];
+
+% number of replicates (how many estimators)
+R = 50; 
+
+%% Getting necessary statistics for analysis
+stats = getStats(models.f);
+mu_true = stats.mus(1);
+
+%% Sampling
+
+s_MFMC = zeros(R, length(p));
+s_MC = zeros(R, length(p));
+% Getting parameters to calculate MFMC and MC estimator
+[mfmc, mc] = getParameters(stats, w, p);
+
+for n = 1:length(p)
+    % Implementing MFMC
+    s_MFMC(:, n) = doMFMC(models, mfmc, R, n, "cdr");
+    
+    % Implementing MC
+    s_MC(:, n) = doMC(models.f(:, 1), mc.m(n), R, "cdr");
+end
+
+%% Experimental and Analytical Statistics
+% Experimental stats
+mfmc.means = mean(s_MFMC)';
+mfmc.sigma = std(s_MFMC)';
+mc.means = mean(s_MC)';
+mc.sigma = std(s_MC)';
+mfmc.mse = mean((mu_true - s_MFMC).^2)';
+mc.mse = mean((mu_true - s_MC).^2)';
+
+% Analytical stats
+mfmc.mseAnal = stats.sigma(1)^2*(1-stats.rho(2)^2)*p./(mfmc.m(:,1).^2*w(1));
+mc.mseAnal = stats.sigma(1)^2./mc.m;
+mc.sigmaAnal = stats.sigma(1)./sqrt(mc.m);
+mfmc.sigmaAnal = sqrt(stats.sigma(1)^2./mfmc.m(:, 1) - sum((1./mfmc.m(:, 1:end-1) - 1./mfmc.m(:, 2:end))*stats.rho(2:end).^2.*stats.sigma(1)^2, 2));
+
+% Comparing Numerical Results
+showTableVals(p, mfmc, mc)
+
+%% Plotting Comptuational Cost versus Mean Estimate
+plotEstimates(p, mu_true, mfmc, mc, 1)
+
+%% Plotting Computational Cost versus MSE
+plotMSE(p, mfmc, mc, 2)
+
