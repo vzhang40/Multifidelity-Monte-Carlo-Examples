@@ -30,7 +30,7 @@ d = 4;
 exactLR = getExactLR(models(1).f, d, a, b);
 
 %% Getting Parameter Values
-[mfmc, mc] = getParameters(stats, w, p);
+[mfmc, mc] = getParameters(stats, w, p); 
 
 %% MC/MFMC Linear Regression
 % beta will be a d+1 x R matrix with pages associated with each cost
@@ -46,128 +46,37 @@ for i = 1:length(p)
 end
 
 %% Plotting:
-xTest = linspace(a, b, 100)';
-VDM = xTest.^(0:d)'; % VDM matrix 
+plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a, b, d, R)
 
-%% One instance of a MC linear regression for each cost
-figure(1); clf(1);
-xlim([0,5])
-rbg = orderedcolors("gem");
-plot(xTest, models(1).f(xTest), "Color", [0, 0, 0, 1], "DisplayName", "True Value")
-hold on
-for i = 1:length(p)
-    fhat = VDM'*betaMC(:, 1, i);
-    plot(xTest, fhat, "Color", rbg(i, :), "DisplayName", "p = " + p(i));
-end
-legend("Location", "best", "Interpreter", "latex")
-xlabel("x")
-ylabel("y")
-title("One Instance of MCLR for each cost")
 
-%% One instance of a MFMC linear regression for each cost
-figure(2); clf(2);
-xlim([0,5])
-rbg = orderedcolors("gem");
-plot(xTest, models(1).f(xTest), "Color", [0, 0, 0, 1], "DisplayName", "True Value")
-hold on
-for i = 1:length(p)
-    fhat = VDM'*betaMFMC(:, 1, i);
-    plot(xTest, fhat, "Color", rbg(i, :), "DisplayName", "p = " + p(i));
-end
-legend("Location", "best", "Interpreter", "latex")
-xlabel("x")
-ylabel("y")
-title("One Instance of MFMCLR for each cost")
-
-%% All of the MC replicates for each cost 
 figure(3); clf(3);
-plot(xTest, models(1).f(xTest), "Color", [0, 0, 0, 1], "DisplayName", "True Value")
-xlim([0,5])
+%% 1000 testing points 
+xTest = linspace(a, b, 1000)';
+XTest = repmat((xTest.^(0:d)')', [1, 1, length(p)]);
+bestf = repmat(exactLR.poly(xTest), [1, R, length(p)]);
+fMF = pagemtimes(XTest, betaMFMC); 
+fMC = pagemtimes(XTest, betaMC); 
+
+errorsMF = abs((fMF - bestf)./bestf);
+errorsMC = abs((fMC - bestf)./bestf);
+
+errorMF = reshape(mean(mean(errorsMF)), [3, 1, 1]); 
+errorMC = reshape(mean(mean(errorsMC)), [3, 1, 1]); 
+
+stdMF = reshape(std(mean(errorsMF, 1)), [3, 1, 1]);
+stdMC = reshape(std(mean(errorsMC, 1)), [3, 1, 1]);
+
+figure(3); clf(3);
+xscale('log') 
 hold on
-for j = 1:R
-    for i = 1:length(p)
-        fhat = VDM'*betaMC(:, j, i);
-        plot(xTest, fhat, "Color", [rbg(i, :) 0.5], "LineWidth", 0.01)
-    end
-end
-plot(xTest, models(1).f(xTest), "Color", [0, 0, 0, 1])
-legend("True Value", "p = 10", "p = 100", "p = 1000")
-xlabel("x")
-ylabel("y")
-title("All MC LR replicates for each cost")
+plot(p, zeros(length(p),1), "k-")
+plot(p, errorMF, 'Color', [0.8500 0.3250 0.0980], "LineStyle","-")
+plot(p, errorMC, 'Color', [0 0.4470 0.7410], "LineStyle","-")
+patch([p; flip(p)], [errorMF-stdMF; flip(errorMF+stdMF)], 'r', 'FaceAlpha', 0.1, 'EdgeColor','none')
+patch([p; flip(p)], [errorMC-stdMC; flip(errorMC+stdMC)], 'b', 'FaceAlpha', 0.1, 'EdgeColor','none')
+legend("$\hat{f}(z, \beta^*)$", "$\hat{f}(z, \beta^{MF})$", "$\hat{f}(z, \beta^{HF})$", "$\pm \sigma_{MF}$", "$\pm \sigma_{HF}$", "Interpreter", "latex")
+xlabel("Computational Budget", "Interpreter", "latex")
+ylabel("Mean Relative Error", "Interpreter", "latex")
+title("Analytical MFMC Linear Regression Example Results", "Interpreter", "latex")
 
-%% All of the MFMC replicates for each cost 
-figure(4); clf(4);
-plot(xTest, models(1).f(xTest), "Color", [0, 0, 0, 1], "DisplayName", "True Value")
-xlim([0,5])
-hold on
-for j = 1:R
-    for i = 1:length(p)
-        fhat = VDM'*betaMFMC(:, j, i);
-        plot(xTest, fhat, "Color", [rbg(i, :) 0.5], "LineWidth", 0.01)
-    end
- 
-end
-plot(xTest, models(1).f(xTest), "Color", [0, 0, 0, 1])
-legend("True Value", "p = 10", "p = 100", "p = 1000")
-xlabel("x")
-ylabel("y")
-title("All MFMC LR replicates for each cost")
 
-%% First Element of Cxy versus p
-figure(5); clf(5)
-subplot(3, 1, 1)
-semilogx(p, exactLR.Cxy(1).*ones(length(p),1), "Color", [0, 0, 0, 1])
-hold on
-Cxy1MC = reshape(CxyMC(1,:,:), [R, length(p)]);
-Cxy1MF = reshape(CxyMFMC(1,:,:), [R, length(p)]);
-semilogx(p, Cxy1MC, "Color", [rbg(1, :) 0.1], "LineWidth", 0.01)
-semilogx(p, Cxy1MF, "Color", [rbg(2, :) 0.1], "LineWidth", 0.01)
-semilogx(p, exactLR.Cxy(1).*ones(length(p),1), "Color", [0, 0, 0, 1])
-semilogx(p, mean(Cxy1MC, 1), "Color", [rbg(1, :) 1], "Linestyle", "--", "Marker", "o")
-semilogx(p, mean(Cxy1MF, 1), "Color", [rbg(2, :) 1], "Linestyle", "--", "Marker", "x")
-xlabel("x")
-ylabel("y")
-title("First Element of $\hat{c}_{XY}$; Average value of $f^{(1)}$", "Interpreter", "latex")
-
-%% First Element of beta versus p
-subplot(3, 1, 2)
-semilogx(p, exactLR.beta(1).*ones(length(p),1), "Color", [0, 0, 0, 1])
-hold on
-beta1MC = reshape(betaMC(1,:,:),  [R, length(p)]);
-beta1MF = reshape(betaMFMC(1,:,:), [R, length(p)]);
-semilogx(p, beta1MC, "Color", [rbg(1, :) 0.1], "LineWidth", 0.01)
-semilogx(p, beta1MF, "Color", [rbg(2, :) 0.1], "LineWidth", 0.01)
-semilogx(p, exactLR.beta(1).*ones(length(p),1), "Color", [0, 0, 0, 1])
-semilogx(p, mean(beta1MC, 1)', "Color", [rbg(1, :) 1], "Linestyle", "--", "Marker", "o")
-semilogx(p, mean(beta1MF, 1)', "Color", [rbg(2, :) 1], "Linestyle", "--", "Marker", "x")
-xlabel("x")
-ylabel("y")
-title("First Element of $\hat{\beta}$", "Interpreter", "latex")
-
-%% fhat(5) versus p
-subplot(3, 1, 3)
-semilogx(p, exactLR.poly(5).*ones(length(p),1), "Color", [0, 0, 0, 1])
-hold on
-mc5 = zeros(R, length(p));
-mf5 = zeros(R, length(p));
-for i = 1:length(p)
-    mc5(:, i) = (5).^(0:d)*betaMC(:, : , i);
-    mf5(:, i) = (5).^(0:d)*betaMFMC(:, : , i);
-end
-semilogx(p, mc5, "Color", [rbg(1, :) 0.1], "LineWidth", 0.01)
-semilogx(p, mf5, "Color", [rbg(2, :) 0.1], "LineWidth", 0.01)
-semilogx(p, exactLR.poly(5).*ones(length(p),1), "Color", [0, 0, 0, 1], "DisplayName", "True Value")
-semilogx(p, mean(mc5, 1)', "Color", [rbg(1, :) 1], "Linestyle", "--", "Marker", "o", "DisplayName", "Monte Carlo")
-semilogx(p, mean(mf5, 1)', "Color", [rbg(2, :) 1], "Linestyle", "--", "Marker", "x", "DisplayName", "Multi-fidelity Monte Carlo")
-xlabel("x")
-ylabel("y")
-title("Predicting $f^{(1)}(5)$", "Interpreter", "latex")
-
-% pl{1} = plot(nan, "Color", [0, 0, 0, 1]);
-% pl{2} = plot(nan, "Color", [rbg(1, :) 0.1]);
-% pl{3} = plot(nan, "Color", [rbg(2, :) 0.1]);
-% pl{4} = plot(nan, "Color", [rbg(1, :) 1], "Linestyle", "--", "Marker", "o");
-% pl{5} = plot(nan, "Color", [rbg(2, :) 1], "Linestyle", "--", "Marker", "x");
-
-% legend([pl{:}], {'True Value','Monte Carlo','Multi-fidelity MC', 'Monte Carlo Mean', 'Multi-fidelity MC Mean'}, 'location', 'southoutside')
