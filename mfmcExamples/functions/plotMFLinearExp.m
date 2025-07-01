@@ -1,4 +1,7 @@
+% This function plots all the results from the MFMC vs MC numerical
+% experiment for the Exponential Linear Regression Example.
 function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a, b, d, R)
+    
     rbg = orderedcolors("gem");
     figure(1); clf(1);
     x = linspace(a, b, 100)';
@@ -58,7 +61,7 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
     
     legend([pl{1}, pl{2}, pl{3}, pl{4}, pl{5}], 'True Value','Monte Carlo', 'Multi-fidelity MC', 'Monte Carlo Mean', 'Multi-fidelity MC Mean', 'Location', 'best');
 
-    %% 
+    %% Regression Plots for Each Computational Budget
     figure(2); clf(2);
     xlim([0,5])
     for i = 1:length(p)
@@ -71,12 +74,12 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
             fhat = VDM'*betaMC(:, j, i);
             plot(x, fhat, "Color", [rbg(1, :) 0.5], "LineWidth", 0.01)
         end
-        xlabel("x")
-        ylabel("y")
-        title("Regression MF versus hi-fidelity; p = " + p(i))
+        xlabel("x", "Interpreter", "latex")
+        ylabel("y", "Interpreter", "latex")
+        title("Regression MF versus hi-fidelity; p = " + p(i), "Interpreter", "latex")
         plot(x, models(1).f(x), "Color", [0, 0, 0, 1], "DisplayName", "True Value")
         if i == length(p)
-            legend("True Value", "Multifidelity Regression", "Hi-Fidelity Linear Regression")
+            legend("True Value", "Multifidelity Regression", "Hi-Fidelity Linear Regression", "Interpreter", "latex")
         end
     end
     %%
@@ -95,6 +98,7 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
     stdMF = reshape(std(mean(errorsMF, 1)), [3, 1, 1]);
     stdMC = reshape(std(mean(errorsMC, 1)), [3, 1, 1]);
     
+    %% Plotting convergence of MF Linear Regression versus HF Linear Regression with computational budget
     figure(3); clf(3);
     xscale('log') 
     hold on

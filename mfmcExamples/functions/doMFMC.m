@@ -1,10 +1,14 @@
 % This function calculates the MFMC estimator R times
 function s = doMFMC(models, mfmc, R, n, flag)
     % IN: 
-    %   fs - must be a cell array of models
-    %   alpha - a vector of weights
-    %   m - a vector of sample sizes
+    %   models - a structure with fields
+    %       f: models in order of accuracy/cost
+    %   mfmc - a structure with fields:
+    %       alpha: weights associated with models
+    %       m: sample sizes associated with models
     %   R - number of replicates
+    %   n - index value associated with computational budget p
+    %   flag - "exp" for exponential example or "cdr" for CDR example
     % OUT:
     %   s - a vector of size R, MFMC estimators
     if flag == "exp"

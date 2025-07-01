@@ -1,15 +1,16 @@
+% This function does Multi-fidelity Monte Carlo Linear Regression for R replicates.
 function [beta, Cxy] = doMFMCLR(models, mfmc, Cxx, d, R, n)
-    % This function does MF Monte Carlo Linear Regression.
-    % In: 
-    % models: functions in order of accuracy
-    % mfmc: structure with weights and sample sizes
-    % Cxx: exact value of Cxx matrix 
-    % d: degree of polynomial regression
-    % R: number of replicates
-    % n: index for cost
+    % IN: 
+    %   models: functions in order of accuracy
+    %   mfmc: structure with weights and sample sizes
+    %   Cxx: exact value of Cxx matrix 
+    %   d: degree of polynomial regression
+    %   R: number of replicates
+    %   n: index for cost
     %
-    % Out:
-    % betaMFMC: a (d+1) x R matrix of R number of coefficients 
+    % OUT:
+    %   betaMFMC: a (d+1) x R matrix of R number of coefficients 
+    
     fs = {models.f};
     col = length(fs);
     Xm = cell(1 ,col);

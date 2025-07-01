@@ -6,8 +6,10 @@ function stats = getStatsGauss(models, N, a, b)
     %   a - lower bound of domain
     %   b - upper bound of domain
     % OUT: 
-    %   stats - a structure with fields: mu, sigma, and rho for means,
-    %   standard deviations, and correlation coefficients
+    %   stats - a structure with fields:
+    %       mus - mean values of models
+    %       sigma - standard deviations for model values
+    %       rho - correlation coefficient between surrogate and truth model
     fs = {models.f};
     for i = 1:length(fs)
         stats.mus(i) = (1./(b-a)).*gauss(fs{i}, N, a, b); 
