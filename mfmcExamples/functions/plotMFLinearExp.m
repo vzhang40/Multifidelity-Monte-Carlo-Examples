@@ -79,4 +79,32 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
             legend("True Value", "Multifidelity Regression", "Hi-Fidelity Linear Regression")
         end
     end
+    %%
+    xTest = linspace(a, b, 1000)';
+    XTest = repmat((xTest.^(0:d)')', [1, 1, length(p)]);
+    bestf = repmat(exactLR.poly(xTest), [1, R, length(p)]);
+    fMF = pagemtimes(XTest, betaMFMC); 
+    fMC = pagemtimes(XTest, betaMC); 
+    
+    errorsMF = abs((fMF - bestf)./bestf);
+    errorsMC = abs((fMC - bestf)./bestf);
+    
+    errorMF = reshape(mean(mean(errorsMF)), [3, 1, 1]); 
+    errorMC = reshape(mean(mean(errorsMC)), [3, 1, 1]); 
+    
+    stdMF = reshape(std(mean(errorsMF, 1)), [3, 1, 1]);
+    stdMC = reshape(std(mean(errorsMC, 1)), [3, 1, 1]);
+    
+    figure(3); clf(3);
+    xscale('log') 
+    hold on
+    plot(p, zeros(length(p),1), "k-")
+    plot(p, errorMF, 'Color', [0.8500 0.3250 0.0980], "LineStyle","-")
+    plot(p, errorMC, 'Color', [0 0.4470 0.7410], "LineStyle","-")
+    patch([p; flip(p)], [errorMF-stdMF; flip(errorMF+stdMF)], 'r', 'FaceAlpha', 0.1, 'EdgeColor','none')
+    patch([p; flip(p)], [errorMC-stdMC; flip(errorMC+stdMC)], 'b', 'FaceAlpha', 0.1, 'EdgeColor','none')
+    legend("$\hat{f}(z, \beta^*)$", "$\hat{f}(z, \beta^{MF})$", "$\hat{f}(z, \beta^{HF})$", "$\pm \sigma_{MF}$", "$\pm \sigma_{HF}$", "Interpreter", "latex")
+    xlabel("Computational Budget", "Interpreter", "latex")
+    ylabel("Mean Relative Error", "Interpreter", "latex")
+    title("Analytical MFMC Linear Regression Example Results", "Interpreter", "latex")
 end
