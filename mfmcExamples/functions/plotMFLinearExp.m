@@ -59,15 +59,14 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
     ylabel("y")
     title("Predicting $f^{(1)}(5)$", "Interpreter", "latex")
     
-    legend([pl{1}, pl{2}, pl{3}, pl{4}, pl{5}], 'True Value','Monte Carlo', 'Multi-fidelity MC', 'Location', 'best');
+    legend([pl{1}, pl{4}, pl{5}], 'True Value','Monte Carlo', 'Multi-fidelity MC', 'Location', 'best');
 
     if ~isfolder("Plots")
          mkdir("Plots");
     end
-    
 
-    if ~exist('.../Plots/exp1.png', 'file')
-        f1 = fullfile("Plots", "exp1.png"); 
+    if ~exist('.../Plots/expLR1.png', 'file')
+        f1 = fullfile("Plots", "expLR1.png"); 
         saveas(gcf, f1)
     end
 
@@ -93,8 +92,8 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
         end
     end
 
-    if ~exist('.../Plots/exp2.png', 'file')
-        f2 = fullfile("Plots", "exp2.png"); 
+    if ~exist('.../Plots/expLR2.png', 'file')
+        f2 = fullfile("Plots", "expLR2.png"); 
         saveas(gcf, f2)
     end
 
@@ -129,8 +128,8 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
     ylabel("Mean Relative Error", "Interpreter", "latex")
     title("Analytical MFMC Linear Regression Example Results", "Interpreter", "latex")
 
-    if ~exist('.../Plots/exp3.png', 'file')
-        f3 = fullfile("Plots", "exp3.png"); 
+    if ~exist('.../Plots/expLR3.png', 'file')
+        f3 = fullfile("Plots", "expLR3.png"); 
         saveas(gcf, f3)
     end
 end

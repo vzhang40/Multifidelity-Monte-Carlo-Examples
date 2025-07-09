@@ -49,17 +49,11 @@ end
 
 %% Generates Plots and Table Values for MFMC vs MC Results
 % Table compares Analytical versus Experimental Statistics
-% Figure 1: Plotting MFMC and MC convergence to true mean
-% Figure 2: Plotting Analytical Mean Square Error with Observed values
-showResultsMFMCExp(mu_true, p, mfmc, mc, "exp")
+% Figure 1: Plotting MFMC and MC convergence to true mean: exp1.png
+% Figure 2: Plotting Analytical Mean Square Error with Observed values:
+% exp2.png
+showResultsMFMC(mu_true, p, mfmc, mc, "exp")
 
-% figure(3); clf(3)
-% semilogx(p, mu_true.*ones(length(p),1), "k-")
-% hold on
-% plot(p, mc.means, 'Color', [0 0.4470 0.7410], "LineStyle","-")
-% plot(p, mfmc.means, 'Color', [0.8500 0.3250 0.0980], "LineStyle","-")
-% plot(p, s_MC, "Color", [0 0.4470 0.7410 0.1], "LineWidth", 0.01)
-% plot(p, s_MFMC, "Color", [0.8500 0.3250 0.0980 0.1], "LineWidth", 0.01)
 
 
 

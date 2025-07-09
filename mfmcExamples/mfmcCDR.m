@@ -11,6 +11,8 @@ addpath('..\mfmcExamples\functions')
 % Models
 models.f = yA; % Column 1: Hi-Fidelity, Column 2: Surrogate/Low Fidelity
 
+clearvars -except models
+
 % Cost vector 
 w = [1.94; 6.20e-3]; % [Hi-Fidelity, Low Fidelity]
 
@@ -39,8 +41,6 @@ for n = 1:length(p)
     
     % Implementing MC
     s_MC(:, n) = doMC(models.f(:, 1), mc.m(n), R, "cdr");
-
-    
 end
 
 %% Experimental and Analytical Statistics
@@ -48,7 +48,8 @@ end
 
 %% Generates Plots and Table Values for MFMC vs MC Results
 % Table compares Analytical versus Experimental Statistics
-% Figure 1: Plotting MFMC and MC convergence to true mean
-% Figure 2: Plotting Analytical Mean Square Error with Observed values
-showResultsMFMCExp(mu_true, p, mfmc, mc, "cdr")
+% Figure 1: Plotting MFMC and MC convergence to true mean: cdr1.png
+% Figure 2: Plotting Analytical Mean Square Error with Observed values:
+% cdr2.png
+showResultsMFMC(mu_true, p, mfmc, mc, "cdr")
 

@@ -53,7 +53,7 @@ for i = 1:length(p)
 end
 
 %% Generates Plots for MFMC vs MC Results in Linear Regression
-% Figure 1: Generates 3 subplots
+% Figure 1: Generates 3 subplots: expLR1.png
 %   Subplot 1: This plots the first element of \hat{c}_{XY} or the
 %   estimated value of XY with computational cost to analyze convergence.
 %   Subplot 2: This plots the first element of \hat{beta} with
@@ -61,11 +61,11 @@ end
 %   Subplot 3: This plots the value of \hat{f}(5) of the polynomial
 %   regression with computational cost
 % Figure 2: Generates 3 subplots with multi-fidelity versus high-fidelity
-% regressions at different computational budgets.
+% regressions at different computational budgets: expLR2.png
 %   Subplot 1: p = 10
 %   Subplot 2: p = 100
 %   Subplot 3: p = 1000
-% Figure 3: Plotting MFMC and MC convergence to best fit polynomial
+% Figure 3: Plotting MFMC and MC convergence to best fit polynomial: expLR3.png
 plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a, b, d, R)
 
 

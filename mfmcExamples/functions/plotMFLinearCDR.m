@@ -20,6 +20,15 @@ function plotMFLinearCDR(betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, d, R, B)
     title("First Element of $\hat{c}_{XY}$; Average value of $f^{(1)}$", "Interpreter", "latex")
     legend([pl{1}, pl{2}, pl{3}, pl{4}, pl{5}], 'True Value','Monte Carlo', 'Multi-fidelity MC', 'Monte Carlo Mean', 'Multi-fidelity MC Mean');
     
+    if ~isfolder("Plots")
+         mkdir("Plots");
+    end
+    
+    if ~exist('.../Plots/cdrLR1.png', 'file')
+        f1 = fullfile("Plots", "cdrLR1.png"); 
+        saveas(gcf, f1)
+    end
+
     %% Generates Plots and Table Values for MFMC vs MC Results in Linear Regression
     % Testing points
     [XTest, ~] = getX(B(:, :), d);
@@ -37,11 +46,6 @@ function plotMFLinearCDR(betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, d, R, B)
     
     stdMF = squeeze(std(mean(errorsMF, 1)));
     stdMC = squeeze(std(mean(errorsMC, 1)));
-
-    if ~exist('.../Plots/cdr1.png', 'file')
-        f1 = fullfile("Plots", "cdr1.png"); 
-        saveas(gcf, f1)
-    end
     
     %% Plotting convergence of MF Linear Regression versus HF Linear Regression with computational budget
     figure(2); clf(2);
@@ -57,8 +61,8 @@ function plotMFLinearCDR(betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, d, R, B)
     ylabel("Mean Relative Error", "Interpreter", "latex")
     title("CDR MFMC Linear Regression Example Results", "Interpreter", "latex")
 
-    if ~exist('.../Plots/cdr2.png', 'file')
-        f2 = fullfile("Plots", "cdr2.png"); 
+    if ~exist('.../Plots/cdrLR2.png', 'file')
+        f2 = fullfile("Plots", "cdrLR2.png"); 
         saveas(gcf, f2)
     end
 end

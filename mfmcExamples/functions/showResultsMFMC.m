@@ -1,6 +1,6 @@
 % This function plots all the results from the MFMC vs MC numerical
-% experiment for the Exponential Example
-function showResultsMFMCExp(mu_true, p, mfmc, mc, flag)
+% experiment for the Exponential and CDR Example
+function showResultsMFMC(mu_true, p, mfmc, mc, flag)
     %% Showing Table of values
     values = table;
     values.Computational_Budget = p;
@@ -18,9 +18,9 @@ function showResultsMFMCExp(mu_true, p, mfmc, mc, flag)
 
     %% Plotting Estimates
     if flag == "exp"
-        name = "Analytical Exponential";
+        name = "Exponential";
     elseif flag == "cdr"
-        name = "Convection Diffusion Reaction";
+        name = "CDR";
     end
     figure(1); clf(1);
     xscale('log') 
@@ -35,6 +35,22 @@ function showResultsMFMCExp(mu_true, p, mfmc, mc, flag)
     ylabel("Estimate Mean Model Output", "Interpreter", "latex")
     title(name +  " MFMC Example Results", "Interpreter", "latex")
 
+    if ~isfolder("Plots")
+         mkdir("Plots");
+    end
+    
+    if flag == "exp"
+        if ~exist('.../Plots/exp1.png', 'file')
+        f1 = fullfile("Plots", "exp1.png"); 
+        saveas(gcf, f1)
+        end
+    elseif flag == "cdr"
+        if ~exist('.../Plots/cdr1.png', 'file')
+        f1 = fullfile("Plots", "cdr1.png"); 
+        saveas(gcf, f1)
+        end
+    end
+
     %% Plotting Mean Square Error
     figure(2); clf(2);
     loglog(p, mfmc.mseAnal, 'Color', [0.8500 0.3250 0.0980], "LineStyle","-")
@@ -45,5 +61,18 @@ function showResultsMFMCExp(mu_true, p, mfmc, mc, flag)
     legend("Analytical MFMC", "Analytical MC", "Observed MFMC", "Observed MC", "Interpreter", "latex")
     xlabel("Computational Cost $p$", "Interpreter", "latex")
     ylabel("Mean Square Error", "Interpreter", "latex")
-    title("Mean Square Error in Sampling Methods", "Interpreter", "latex")
+    title("Mean Square Error in Sampling Methods: " + name, "Interpreter", "latex")
+
+    if flag == "exp"
+        if ~exist('.../Plots/exp2.png', 'file')
+        f1 = fullfile("Plots", "exp2.png"); 
+        saveas(gcf, f1)
+        end
+    elseif flag == "cdr"
+        if ~exist('.../Plots/cdr2.png', 'file')
+        f1 = fullfile("Plots", "cdr2.png"); 
+        saveas(gcf, f1)
+        end
+    end
+    
 end
