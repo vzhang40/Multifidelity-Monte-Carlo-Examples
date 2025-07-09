@@ -59,7 +59,17 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
     ylabel("y")
     title("Predicting $f^{(1)}(5)$", "Interpreter", "latex")
     
-    legend([pl{1}, pl{2}, pl{3}, pl{4}, pl{5}], 'True Value','Monte Carlo', 'Multi-fidelity MC', 'Monte Carlo Mean', 'Multi-fidelity MC Mean', 'Location', 'best');
+    legend([pl{1}, pl{2}, pl{3}, pl{4}, pl{5}], 'True Value','Monte Carlo', 'Multi-fidelity MC', 'Location', 'best');
+
+    if ~isfolder("Plots")
+         mkdir("Plots");
+    end
+    
+
+    if ~exist('.../Plots/exp1.png', 'file')
+        f1 = fullfile("Plots", "exp1.png"); 
+        saveas(gcf, f1)
+    end
 
     %% Regression Plots for Each Computational Budget
     figure(2); clf(2);
@@ -82,21 +92,28 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
             legend("True Value", "Multifidelity Regression", "Hi-Fidelity Linear Regression", "Interpreter", "latex")
         end
     end
-    %%
+
+    if ~exist('.../Plots/exp2.png', 'file')
+        f2 = fullfile("Plots", "exp2.png"); 
+        saveas(gcf, f2)
+    end
+
+    %% 1000 Testing Points
     xTest = linspace(a, b, 1000)';
     XTest = repmat((xTest.^(0:d)')', [1, 1, length(p)]);
     bestf = repmat(exactLR.poly(xTest), [1, R, length(p)]);
+    
     fMF = pagemtimes(XTest, betaMFMC); 
     fMC = pagemtimes(XTest, betaMC); 
     
     errorsMF = abs((fMF - bestf)./bestf);
     errorsMC = abs((fMC - bestf)./bestf);
     
-    errorMF = reshape(mean(mean(errorsMF)), [3, 1, 1]); 
-    errorMC = reshape(mean(mean(errorsMC)), [3, 1, 1]); 
+    errorMF = squeeze(mean(mean(errorsMF))); 
+    errorMC =squeeze(mean(mean(errorsMC))); 
     
-    stdMF = reshape(std(mean(errorsMF, 1)), [3, 1, 1]);
-    stdMC = reshape(std(mean(errorsMC, 1)), [3, 1, 1]);
+    stdMF = squeeze(std(mean(errorsMF, 1)));
+    stdMC = squeeze(std(mean(errorsMC, 1)));
     
     %% Plotting convergence of MF Linear Regression versus HF Linear Regression with computational budget
     figure(3); clf(3);
@@ -111,4 +128,9 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
     xlabel("Computational Budget", "Interpreter", "latex")
     ylabel("Mean Relative Error", "Interpreter", "latex")
     title("Analytical MFMC Linear Regression Example Results", "Interpreter", "latex")
+
+    if ~exist('.../Plots/exp3.png', 'file')
+        f3 = fullfile("Plots", "exp3.png"); 
+        saveas(gcf, f3)
+    end
 end

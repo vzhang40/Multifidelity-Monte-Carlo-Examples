@@ -15,7 +15,7 @@ models.f = yA; % Column 1: Hi-Fidelity, Column 2: Surrogate/Low Fidelity
 w = [1.94; 6.20e-3]; % [Hi-Fidelity, Low Fidelity]
 
 % Computational Budgets
-p = [10; 40; 100; 1000];
+p = [10; 100; 1000];
 
 % Number of Replicates
 R = 50;
@@ -39,6 +39,8 @@ for n = 1:length(p)
     
     % Implementing MC
     s_MC(:, n) = doMC(models.f(:, 1), mc.m(n), R, "cdr");
+
+    
 end
 
 %% Experimental and Analytical Statistics

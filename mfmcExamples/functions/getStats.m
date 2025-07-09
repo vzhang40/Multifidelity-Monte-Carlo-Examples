@@ -2,9 +2,6 @@
 function stats = getStats(models)
     % IN:
     %   models - functions/models
-    %   N - number of points used
-    %   a - lower bound of domain
-    %   b - upper bound of domain
     % OUT: 
     %   stats - a structure with fields:
     %       mus - mean values of models

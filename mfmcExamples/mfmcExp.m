@@ -17,10 +17,10 @@ a = 0; b = 5; % bounds
 w = [1; 0.001]; % [high-fidelity, low-fidelity]
 
 % Computational Budgets
-p = [10; 40; 100; 1000];
+p = [10; 100; 1000];
 
 % Number of Replicates
-R = 50; 
+R = 500; 
 
 %% Getting Necessary Statistics for Analysis
 % Gaussian Quadrature Calculations
@@ -52,6 +52,15 @@ end
 % Figure 1: Plotting MFMC and MC convergence to true mean
 % Figure 2: Plotting Analytical Mean Square Error with Observed values
 showResultsMFMCExp(mu_true, p, mfmc, mc, "exp")
+
+% figure(3); clf(3)
+% semilogx(p, mu_true.*ones(length(p),1), "k-")
+% hold on
+% plot(p, mc.means, 'Color', [0 0.4470 0.7410], "LineStyle","-")
+% plot(p, mfmc.means, 'Color', [0.8500 0.3250 0.0980], "LineStyle","-")
+% plot(p, s_MC, "Color", [0 0.4470 0.7410 0.1], "LineWidth", 0.01)
+% plot(p, s_MFMC, "Color", [0.8500 0.3250 0.0980 0.1], "LineWidth", 0.01)
+
 
 
 

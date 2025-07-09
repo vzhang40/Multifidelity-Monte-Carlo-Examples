@@ -32,7 +32,7 @@ d = 4;
 
 %% Calculating Exact Analytical Values for Cxx and Cxy
 % Gaussian Quadrature
-exactLR = getExactLR(models(1).f, d, a, b);
+exactLR = getExactLR(models(1).f, d, "exp", a, b);
 
 %% Getting Parameter Values, \alpha^{mean}
 [mfmc, mc] = getParameters(stats, w, p); 
@@ -48,11 +48,11 @@ CxyMC = zeros(d+1, R, length(p));
 
 % MC/MFMC Linear Regression
 for i = 1:length(p)
-    [betaMC(:, :, i), CxyMC(:, :, i)] = doMCLR(models(1).f, exactLR.Cxx, d, mc.m(i), R);
-    [betaMFMC(:, :, i), CxyMFMC(:, :, i)] = doMFMCLR(models, mfmc, exactLR.Cxx, d, R, i);
+    [betaMC(:, :, i), CxyMC(:, :, i)] = doMCLR(models(1).f, exactLR.Cxx, d, mc.m(i), R, "exp");
+    [betaMFMC(:, :, i), CxyMFMC(:, :, i)] = doMFMCLR(models, mfmc, exactLR.Cxx, d, R, i, "exp");
 end
 
-%% Generates Plots and Table Values for MFMC vs MC Results in Linear Regression
+%% Generates Plots for MFMC vs MC Results in Linear Regression
 % Figure 1: Generates 3 subplots
 %   Subplot 1: This plots the first element of \hat{c}_{XY} or the
 %   estimated value of XY with computational cost to analyze convergence.
