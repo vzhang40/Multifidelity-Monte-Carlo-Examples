@@ -19,8 +19,8 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
     semilogx(p, exactLR.Cxy(1).*ones(length(p),1), "Color", [0, 0, 0, 1])
     semilogx(p, mean(Cxy1MC, 1), "Color", [rbg(1, :) 1], "Linestyle", "--", "Marker", "o")
     semilogx(p, mean(Cxy1MF, 1), "Color", [rbg(2, :) 1], "Linestyle", "--", "Marker", "x")
-    xlabel("x")
-    ylabel("y")
+    xlabel("p", "Interpreter", "latex")
+    ylabel("$\hat{c}_{XY}(1)$", "Interpreter", "latex")
     title("First Element of $\hat{c}_{XY}$; Average value of $f^{(1)}$", "Interpreter", "latex")
 
     %% First Element of beta versus p
@@ -34,8 +34,8 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
     semilogx(p, exactLR.beta(1).*ones(length(p),1), "Color", [0, 0, 0, 1])
     semilogx(p, mean(beta1MC, 1)', "Color", [rbg(1, :) 1], "Linestyle", "--", "Marker", "o")
     semilogx(p, mean(beta1MF, 1)', "Color", [rbg(2, :) 1], "Linestyle", "--", "Marker", "x")
-    xlabel("x")
-    ylabel("y")
+    xlabel("p", "Interpreter", "latex")
+    ylabel("$\hat{\beta}(1)$", "Interpreter", "latex")
     title("First Element of $\hat{\beta}$", "Interpreter", "latex")
 
     %% fhat(5) versus p
@@ -55,8 +55,8 @@ function plotMFLinearExp(models, betaMFMC, betaMC, CxyMFMC, CxyMC, exactLR, p, a
     semilogx(p, exactLR.poly(5).*ones(length(p),1), "Color", [0, 0, 0, 1], "DisplayName", "True Value");
     pl{4} = semilogx(p, mean(mc5, 1)', "Color", [rbg(1, :) 1], "Linestyle", "--", "Marker", "o", "DisplayName", "Monte Carlo");
     pl{5} = semilogx(p, mean(mf5, 1)', "Color", [rbg(2, :) 1], "Linestyle", "--", "Marker", "x", "DisplayName", "Multi-fidelity Monte Carlo");
-    xlabel("x")
-    ylabel("y")
+    xlabel("p", "Interpreter", "latex")
+    ylabel("$\hat{f}^{(1)}(5)$", "Interpreter", "latex")
     title("Predicting $f^{(1)}(5)$", "Interpreter", "latex")
     
     legend([pl{1}, pl{4}, pl{5}], 'True Value','Monte Carlo', 'Multi-fidelity MC', 'Location', 'best');

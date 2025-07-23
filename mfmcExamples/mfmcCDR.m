@@ -20,7 +20,7 @@ w = [1.94; 6.20e-3]; % [Hi-Fidelity, Low Fidelity]
 p = [10; 100; 1000];
 
 % Number of Replicates
-R = 50;
+R = 500;
 
 %% Getting necessary statistics for analysis
 % Statistics are generated with full access to the data
@@ -52,4 +52,3 @@ end
 % Figure 2: Plotting Analytical Mean Square Error with Observed values:
 % cdr2.png
 showResultsMFMC(mu_true, p, mfmc, mc, "cdr")
-
