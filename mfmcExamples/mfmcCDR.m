@@ -5,8 +5,8 @@ clear; close all; clc
 % fidelity models to estimate.
 
 %% Problem Set-up
-load('samples.mat') % Loads CDR data into the workspace
 addpath('..\mfmcExamples\functions')
+load('samples.mat') % Loads CDR data into the workspace
 
 % Models
 models.f = yA; % Column 1: Hi-Fidelity, Column 2: Surrogate/Low Fidelity

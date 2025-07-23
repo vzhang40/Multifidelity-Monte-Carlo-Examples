@@ -12,8 +12,8 @@ clear; close all; clc;
 % E: activation energy
  
 %% Problem Set-up
-load('samples.mat')
 addpath('..\mfmcExamples\functions')
+load('samples.mat')
 
 models.inputs = A;
 models.f = yA;
