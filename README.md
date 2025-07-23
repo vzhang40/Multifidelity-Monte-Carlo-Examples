@@ -52,9 +52,27 @@ This is a MATLAB implementation of the Multifidelity Monte Carlo (MFMC) approach
 </details>
 
 ## Summary
-The scripts `mfmcExp.m` and `mfmcCDR.m` respectively implements the Multifidelity Monte Carlo method for mean estimation [[1](https://doi.org/10.3934/fods.2024049)] for the numerical experiments performed in [[2](https://doi.org/10.3934/fods.2024049)] while the scripts `mfLinearExp` and `mfLinearCDR` implements Multifidelity Monte Carlo Method for Linear Regression described in [[2](https://doi.org/10.3934/fods.2024049)] with the same examples.
+The scripts `mfmcExp.m` and `mfmcCDR.m` respectively implements the Multifidelity Monte Carlo method for mean estimation [[1](https://doi.org/10.3934/fods.2024049)] for the numerical experiments performed in [[2](https://doi.org/10.3934/fods.2024049)] while the scripts `mfLinearExp.m` and `mfLinearCDR.m` implements Multifidelity Monte Carlo Method for Linear Regression described in [[2](https://doi.org/10.3934/fods.2024049)] with the same examples.
 
 ## Background
+The Monte Carlo Methods are a large class of computational algorithms that uses Random Sampling to obtain results. For a single-fidelity (one model) implementation of the Monte Carlo mean estimator, we find that while results are robust, convergence to he solution is costly and requires many samples. 
+
+Monte Carlo Mean Estimator 
+
+<p align="center">
+	<img width="596" height="141" alt="image" src="https://github.com/user-attachments/assets/470fba9c-ad21-425b-8b4b-cf8610c3d2a9" />
+</p>
+
+This project introduces the implementation of the Multifidelity Monte Carlo Method that uses multiple models to evaluate mean values using a control variate method. This method balances accuracy with computational cost, acheiving greater accuracy with the same cost as the single fidelity method.
+
+Multifidelity Monte Carlo Mean Estimator
+
+<p align="center">
+	<img width="869" height="88" alt="image" src="https://github.com/user-attachments/assets/ef45a3ca-8e90-4818-bbf6-3b95f793c074" />
+</p>
+
+
+where $m_1$ and $m_2$ denote sample sizes corresponding to each model and $\alpha$ represents a coefficient optimally chosen to decrease the variance.
 
 ## Examples
 
