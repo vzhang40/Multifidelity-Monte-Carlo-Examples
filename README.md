@@ -55,9 +55,9 @@ This is a MATLAB implementation of the Multifidelity Monte Carlo (MFMC) approach
 The scripts `mfmcExp.m` and `mfmcCDR.m` respectively implements the Multifidelity Monte Carlo method for mean estimation [[1](https://doi.org/10.3934/fods.2024049)] for the numerical experiments performed in [[2](https://doi.org/10.3934/fods.2024049)] while the scripts `mfLinearExp.m` and `mfLinearCDR.m` implements Multifidelity Monte Carlo Method for Linear Regression described in [[2](https://doi.org/10.3934/fods.2024049)] with the same examples.
 
 ## Background
-The Monte Carlo Methods are a large class of computational algorithms that uses Random Sampling to obtain results. For a single-fidelity (one model) implementation of the Monte Carlo mean estimator, we find that while results are robust, convergence to he solution is costly and requires many samples. 
+The Monte Carlo Methods are a large class of computational algorithms that uses Random Sampling to obtain results. For a single-fidelity (one model) implementation of the Monte Carlo mean estimator, we find that while results are robust, convergence to the solution is costly and requires many samples. 
 
-Monte Carlo Mean Estimator 
+Monte Carlo Mean Estimator:
 
 <p align="center">
 	$$\mathbb{E}[f(X)] \sim \hat{y}_N = \frac{1}{N}\sum_{i=1}^{N}f(x_i) $$
@@ -65,7 +65,7 @@ Monte Carlo Mean Estimator
 
 This project introduces the implementation of the Multifidelity Monte Carlo Method that uses multiple models to evaluate mean values using a control variate method. This method balances accuracy with computational cost, acheiving greater accuracy with the same cost as the single fidelity method.
 
-Multifidelity Monte Carlo Mean Estimator
+Multifidelity Monte Carlo Mean Estimator:
 
 <p align="center">
 	$$\mathbb{E}[f(X)] \sim \hat{y}_{\text{MFMC}} = \hat{y}^{(1)}_{m_1} + \alpha ( \hat{y}^{(2)}_{m_2} - \hat{y}^{(2)}_{m_1})$$ 
