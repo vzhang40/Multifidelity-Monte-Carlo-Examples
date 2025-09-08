@@ -60,7 +60,7 @@ The Monte Carlo Methods are a large class of computational algorithms that uses 
 Monte Carlo Mean Estimator 
 
 <p align="center">
-	<img width="596" height="141" alt="image" src="https://github.com/user-attachments/assets/470fba9c-ad21-425b-8b4b-cf8610c3d2a9" />
+	$$\mathbb{E}[f(X)] \sim \hat{y}_N = \frac{1}{N}\sum_{i=1}^{N}f(x_i) $$
 </p>
 
 This project introduces the implementation of the Multifidelity Monte Carlo Method that uses multiple models to evaluate mean values using a control variate method. This method balances accuracy with computational cost, acheiving greater accuracy with the same cost as the single fidelity method.
@@ -68,7 +68,7 @@ This project introduces the implementation of the Multifidelity Monte Carlo Meth
 Multifidelity Monte Carlo Mean Estimator
 
 <p align="center">
-	<img width="869" height="88" alt="image" src="https://github.com/user-attachments/assets/ef45a3ca-8e90-4818-bbf6-3b95f793c074" />
+	$$\mathbb{E}[f(X)] \sim \hat{y}_{\text{MFMC}} = \hat{y}^{(1)}_{m_1} + \alpha ( \hat{y}^{(2)}_{m_2} - \hat{y}^{(2)}_{m_1})$$ 
 </p>
 
 
