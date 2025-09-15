@@ -1,36 +1,43 @@
 # Multifidelity Monte Carlo
 
-This is a MATLAB implementation of the Multifidelity Monte Carlo approach to mean estimation and linear regression described in:
+This is a MATLAB implementation of the Multifidelity Monte Carlo (MFMC) approach to mean estimation and linear regression described in:
 
 1. Peherstorfer, B., Willcox, K., & Gunzburger, M. (2016).
-   [Optimal Model Management for Multifidelity Monte Carlo Estimation.](https://doi.org/10.1137/15M1046472) SIAM Journal on Scientific Computing, 38(5), A3163–A3194. 
-   <details><summary>BibTeX</summary><pre>
-@article{peherstorfer_optimal_2016,
-	title = {Optimal {Model} {Management} for {Multifidelity} {Monte} {Carlo} {Estimation}},
-	volume = {38},
-	issn = {1064-8275, 1095-7197},
-	url = {http://epubs.siam.org/doi/10.1137/15M1046472},
-	doi = {10.1137/15M1046472},
-	abstract = {This work presents an optimal model management strategy that exploits multiﬁdelity surrogate models to accelerate the estimation of statistics of outputs of computationally expensive high-ﬁdelity models. Existing acceleration methods typically exploit a multilevel hierarchy of surrogate models that follow a known rate of error decay and computational costs; however, a general collection of surrogate models, which may include projection-based reduced models, data-ﬁt models, support vector machines, and simpliﬁed-physics models, does not necessarily give rise to such a hierarchy. Our multiﬁdelity approach provides a framework to combine an arbitrary number of surrogate models of any type. Instead of relying on error and cost rates, an optimization problem balances the number of model evaluations across the high-ﬁdelity and surrogate models with respect to error and costs. We show that a unique analytic solution of the model management optimization problem exists under mild conditions on the models. Our multiﬁdelity method makes occasional recourse to the high-ﬁdelity model; in doing so it provides an unbiased estimator of the statistics of the high-ﬁdelity model, even in the absence of error bounds and error estimators for the surrogate models. Numerical experiments with linear and nonlinear examples show that speedups by orders of magnitude are obtained compared to Monte Carlo estimation that invokes a single model only.},
-	language = {en},
-	number = {5},
-	urldate = {2025-06-24},
-	journal = {SIAM Journal on Scientific Computing},
-	author = {Peherstorfer, Benjamin and Willcox, Karen and Gunzburger, Max},
-	month = jan,
-	year = {2016},
-	pages = {A3163--A3194},
-}</pre></details>
+   [Optimal Model Management for Multifidelity Monte Carlo Estimation.](https://doi.org/10.1137/15M1046472) SIAM Journal on Scientific Computing, 38(5), A3163–A3194.
+<details markdown="1">
+  <summary>BibTeX</summary>
 
-2. Qian, E., Kang, D., Sella, V., & Chaudhuri, A. (2025). [Multifidelity linear regression for scientific machine learning from scarce data](https://doi.org/10.3934/fods.2024049). Foundations of Data Science, 7(1), 271–297. 
-   <details><summary>BibTeX</summary><pre>
-@article{qian_multifidelity_2025,
+  ```bibtex
+   @article{peherstorfer_optimal_2016,
+		title = {Optimal {Model} {Management} for {Multifidelity} {Monte} {Carlo} {Estimation}},
+		volume = {38},
+		issn = {1064-8275, 1095-7197},
+		url = {http://epubs.siam.org/doi/10.1137/15M1046472},
+		doi = {10.1137/15M1046472},
+		language = {en},
+		number = {5},
+		urldate = {2025-06-24},
+		journal = {SIAM Journal on Scientific Computing},
+		author = {Peherstorfer, Benjamin and Willcox, Karen and Gunzburger, Max},
+		month = jan,
+		year = {2016},
+		pages = {A3163--A3194},
+	}
+```
+</details>
+
+2. Qian, E., Kang, D., Sella, V., & Chaudhuri, A. (2025). [Multifidelity linear regression for scientific machine learning from scarce data](https://doi.org/10.3934/fods.2024049). Foundations of Data Science, 7(1), 271–297.
+
+<details markdown="1">
+  <summary>BibTeX</summary>
+
+  ```bibtex
+   @article{qian_multifidelity_2025,
 	title = {Multifidelity linear regression for scientific machine learning from scarce data},
 	volume = {7},
 	copyright = {http://creativecommons.org/licenses/by/3.0/},
 	url = {https://www.aimsciences.org/en/article/doi/10.3934/fods.2024049},
 	doi = {10.3934/fods.2024049},
-	abstract = {Machine learning (ML) methods, which fit data to the parameters of a given parameterized model class, have garnered significant interest as potential methods for learning surrogate models for complex engineering systems where traditional simulation is expensive. However, in many scientific and engineering settings, generating high-fidelity data to train ML models is expensive, and the available budget for generating training data is limited, making high-fidelity training data scarce. ML models trained on scarce data have high variance, resulting in poor expected generalization performance. We propose a new multifidelity training approach for scientific machine learning via linear regression that exploits the scientific context where data of varying fidelities and costs are available; for example, high-fidelity data may be generated by an expensive fully resolved physics simulation whereas lower-fidelity data may arise from a cheaper model based on simplifying assumptions. We use the multifidelity data within an approximate control variate framework to define new multifidelity Monte Carlo estimators for linear regression models. We provide bias and variance analysis of our new estimators that guarantee the approach's accuracy and improved robustness to scarce high-fidelity data. Numerical results demonstrate that our multifidelity training approach achieves similar accuracy to the standard high-fidelity-only approach, significantly reducing high-fidelity data requirements.},
 	language = {en},
 	number = {1},
 	urldate = {2025-06-24},
@@ -40,7 +47,44 @@ This is a MATLAB implementation of the Multifidelity Monte Carlo approach to mea
 	year = {2025},
 	note = {Publisher: Foundations of Data Science},
 	pages = {271--297},
-}</pre></details>
+	}
+```
+</details>
 
 ## Summary
-The scripts `mfmcExp.m` and `mfmcCDR.m` respectively implements the multifidelity monte carlo method for mean estimation [1] to both examples while the scripts `mfLinearExp` and `mfLinearCDR` implements multifidelity monte carlo for linear regression [2] to the same examples.
+The scripts `mfmcExp.m` and `mfmcCDR.m` respectively implements the Multifidelity Monte Carlo method for mean estimation [[1](https://doi.org/10.3934/fods.2024049)] for the numerical experiments performed in [[2](https://doi.org/10.3934/fods.2024049)] while the scripts `mfLinearExp.m` and `mfLinearCDR.m` implements Multifidelity Monte Carlo Method for Linear Regression described in [[2](https://doi.org/10.3934/fods.2024049)] with the same examples.
+
+## Background
+The Monte Carlo Methods are a large class of computational algorithms that uses Random Sampling to obtain results. For a single-fidelity (one model) implementation of the Monte Carlo mean estimator, we find that while results are robust, convergence to the solution is costly and requires many samples. 
+
+Monte Carlo Mean Estimator:
+
+<p align="center">
+	$$\mathbb{E}[f(X)] \sim \hat{y}_N = \frac{1}{N}\sum_{i=1}^{N}f(x_i) $$
+</p>
+
+This project introduces the implementation of the Multifidelity Monte Carlo Method that uses multiple models to evaluate mean values using a control variate method. This method balances accuracy with computational cost, acheiving greater accuracy with the same cost as the single fidelity method.
+
+Multifidelity Monte Carlo Mean Estimator:
+
+<p align="center">
+	$$\mathbb{E}[f(X)] \sim \hat{y}_{\text{MFMC}} = \hat{y}^{(1)}_{m_1} + \alpha ( \hat{y}^{(2)}_{m_2} - \hat{y}^{(2)}_{m_1})$$ 
+</p>
+
+
+where $m_1$ and $m_2$ denote sample sizes corresponding to each model and $\alpha$ represents a coefficient optimally chosen to decrease the variance.
+
+## Examples
+
+### Analytical Exponential Example
+`mfmcExp.m` compares the performance of single-fidelity Monte Carlo mean estimation with the multifidelity counterpart with evaluating the average value of $\exp(x)$ in the interval $x \in [0, 5]$. 
+
+`mfLinearExp.m` compares the performance of a single-fidelity Monte Carlo approach to linear regression with its multifidelity counterpart with finding a polynomial regression of $\exp(x)$ in the interval $x \in [0, 5]$ using a univariate monomial function basis of degree 4: $X = [1, z, z^2, z^3, z^4]^\top$
+
+### Convection-Diffusion-Reaction Example
+The CDR example is from data resulting from a computational combustion simulation. With 5 chemical and temperature inputs, we arrive at our quantity of interest, the maximum temperature of the chamber at steady state.
+
+`mfmcCDR.m` compares the performance of single-fidelity Monte Carlo mean estimation with the multifidelity counterpart with evaluating the average QoI from the CDR Data. 
+
+`mfLinearCDR.m` compares the performance of a single-fidelity Monte Carlo approach to linear regression with its multifidelity counterpart. We use a quadratic polynomial basis with our 5 input variables to estimate our QoI. 
+
