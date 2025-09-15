@@ -17,7 +17,7 @@ a = 0; b = 5; % bounds
 w = [1; 0.001]; % [high-fidelity, low-fidelity]
 
 % Computational Budgets
-p = [10; 100; 1000];
+p = [10; 40; 100; 1000];
 
 % Number of Replicates
 R = 500; 
