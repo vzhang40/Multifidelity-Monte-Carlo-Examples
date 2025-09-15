@@ -52,7 +52,7 @@ This is a MATLAB implementation of the Multifidelity Monte Carlo (MFMC) approach
 </details>
 
 ## Summary
-The scripts `mfmcExp.m` and `mfmcCDR.m` respectively implements the Multifidelity Monte Carlo method for mean estimation [[1](https://doi.org/10.3934/fods.2024049)] for the numerical experiments performed in [[2](https://doi.org/10.3934/fods.2024049)] while the scripts `mfLinearExp.m` and `mfLinearCDR.m` implements Multifidelity Monte Carlo Method for Linear Regression described in [[2](https://doi.org/10.3934/fods.2024049)] with the same examples.
+The scripts `mfmcExp.m` and `mfmcCDR.m` respectively implements the Multifidelity Monte Carlo method for mean estimation [[1](https://doi.org/10.3934/fods.2024049)] for the numerical experiments performed in [[2](https://doi.org/10.3934/fods.2024049)] while the scripts `mfLinearExp.m` and `mfLinearCDR.m` implements Multifidelity Monte Carlo Method for Linear Regression described in [[2](https://doi.org/10.3934/fods.2024049)] with the same examples. Running these scripts will generate plots found in the `plots` folder.
 
 ## Background
 The Monte Carlo Methods are a large class of computational algorithms that uses Random Sampling to obtain results. For a single-fidelity (one model) implementation of the Monte Carlo mean estimator, we find that while results are robust, convergence to the solution is costly and requires many samples. 
